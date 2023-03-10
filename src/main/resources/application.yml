@@ -1,0 +1,33 @@
+# 生产
+#spring:
+#  rabbitmq:
+#    host: 43.143.238.127
+#    port: 5672
+#    username: admin
+#    password: admin123
+#    virtual-host: /Xxxxx
+#
+#server:
+#  port: 8085
+
+
+#本机
+server:
+  port: 8085
+spring:
+  rabbitmq:
+    host: 192.168.154.128
+    port: 5672
+    username: admin
+    password: Huang130028
+    #绑定到对应的虚拟机
+    virtual-host: Xxxxx
+    publisher-returns: true
+    listener:
+      simple:
+        #       acknowledge-mode: manual # 手动应答 可以在配置@RabbitListener(ackMode = "MANUAL")
+        prefetch: 1 #(此配置实现能者多劳)每次从队列中取一个,轮询分发，默认是公平分发
+        retry:
+          max-attempts: 5 # 重试次数
+          enabled: true # 开启重试
+    publisher-confirm-type:
