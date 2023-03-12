@@ -16,6 +16,36 @@
     <properties>
         <java.version>15</java.version>
     </properties>
+
+    <profiles>
+        <!-- 开发环境 -->
+        <profile>
+            <id>dev</id>
+            <properties>
+                <env>dev</env><!-- 之前写的@env@就是通过这里的配置切换环境 -->
+            </properties>
+
+        </profile>
+        <!-- 测试环境 -->
+        <profile>
+            <id>test</id>
+            <properties>
+                <env>test</env>
+            </properties>
+        </profile>
+        <!-- 本地环境 -->
+        <profile>
+            <id>local</id>
+            <properties>
+                <env>local</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault><!-- 指定缺省环境 -->
+            </activation>
+        </profile>
+    </profiles>
+
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

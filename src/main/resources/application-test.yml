@@ -1,0 +1,44 @@
+# 生产
+#spring:
+#  rabbitmq:
+#    host: 43.143.238.127
+#    port: 5672
+#    username: admin
+#    password: admin123
+#    virtual-host: /Xxxxx
+#
+#server:
+#  port: 8085
+spring:
+  profiles:
+    #选择环境
+    active: @env@
+
+#本机
+server:
+  port: 8085
+spring:
+  rabbitmq:
+    host: anqi27.cn
+    port: 5672
+    username: admin
+    password: admin123
+    #绑定到对应的虚拟机
+    virtual-host: /Xxxxx
+    #发送者开启 confirm 确认机制
+    #NONE值是禁用发布确认模式，是默认值
+    #CORRELATED值是发布消息成功到交换器后会触发回调方法
+    #SIMPLE值经测试有两种效果，其一效果和CORRELATED值一样会触发回调方法，其二在发布消息成功后使用rabbitTemplate调用waitForConfirms或waitForConfirmsOrDie方法等待broker节点返回发送结果，根据返回结果来判定下一步的逻辑，要注意的点是waitForConfirmsOrDie方法如果返回false则会关闭channel，则接下来无法发送消息到broker;
+    publisher-confirm-type: CORRELATED
+    # 发送者开启 return 确认机制
+    publisher-returns: true
+    template:
+      #注意，mandatory一定要设置为true，否则找不到路由规则的消息会被broker直接抛弃
+      mandatory: true
+    listener:
+      simple:
+        #       acknowledge-mode: manual # 手动应答 可以在配置@RabbitListener(ackMode = "MANUAL")
+        prefetch: 1 #(此配置实现能者多劳)每次从队列中取一个,轮询分发，默认是公平分发
+        retry:
+          max-attempts: 5 # 重试次数
+          enabled: true # 开启重试
