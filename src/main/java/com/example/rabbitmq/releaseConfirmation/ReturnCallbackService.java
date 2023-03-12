@@ -21,6 +21,7 @@ public class ReturnCallbackService implements RabbitTemplate.ReturnCallback {
      **/
     @Override
     public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
-        log.info("returnedMessage ===> replyCode={} ,replyText={} ,exchange={} ,routingKey={}", replyCode, replyText, exchange, routingKey);
+        log.error("消息 {} 经交换机 {} 通过routingKey={} 路由到队列失败，失败code为：{}， 失败原因为：{}",
+                new String(message.getBody()), exchange, routingKey, replyCode, replyText);
     }
 }
