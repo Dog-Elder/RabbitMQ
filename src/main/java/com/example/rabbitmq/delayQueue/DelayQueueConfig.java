@@ -28,9 +28,7 @@ public class DelayQueueConfig {
     //队列
     @Bean
     public Queue delayQueueName(){
-        Map<String, Object> arguments = new HashMap<>();
-        arguments.put("x-max-priority", 10);
-        return new Queue(DELAY_QUEUE_NAME,true,false,false,arguments);
+        return new Queue(DELAY_QUEUE_NAME,true,false,false);
     }
     /**
      * 声明交换机
