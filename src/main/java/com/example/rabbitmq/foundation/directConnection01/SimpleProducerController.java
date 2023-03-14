@@ -25,33 +25,26 @@ public class SimpleProducerController {
     @ResponseBody
     public void testHello() {
         //将消息携带绑定键值：TestDirectRouting 发送到交换机TestDirectExchange
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 200; i++) {
             rabbitTemplate.convertAndSend(SimpleConfig.SIMPLE_EXCHANGE, SimpleConfig.SIMPLE_DIRECT_ROUTING, "hello world1");
         }
     }
 
-    @RabbitHandler
     /**
      * queuesToDeclare = @Queue(SimpleConfig.SIMPLE_QUEUE) 要监听的队列
      * ackMode = "MANUAL" 设置为消息手动提交ACK
      **/
+    @RabbitHandler
     @RabbitListener(queuesToDeclare = @Queue(SimpleConfig.SIMPLE_QUEUE), ackMode = "MANUAL")
     public void receive1(String msg, Channel channel, Message message) throws IOException {
         try {
-            //如果消息处理失败
-//            int num = 1/0;
-            Thread.sleep(1000);
+
+            Thread.sleep(3000);
             System.out.println("消息处理成功1：" + msg);
-            // deliveryTag:该消息的index
-            // multiple：是否批量.true:将一次性ack所有小于deliveryTag的消息
-            // 这里表示该消息已经被消费了 可以在队列删掉 这样以后就不会再发了
+
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (Exception e) {
             System.out.println("消息处理失败1：" + msg);
-            // deliveryTag:该消息的index
-            // multiple：是否批量.true:将一次性拒绝所有小于deliveryTag的消息。
-            // requeue：被拒绝的是否重新入队列
-            // 这里表示该消息没有被成功消费，并且将该消息重新入队列
             channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
         }
     }
