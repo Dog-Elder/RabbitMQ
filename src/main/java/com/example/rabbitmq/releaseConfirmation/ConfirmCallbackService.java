@@ -22,9 +22,9 @@ public class ConfirmCallbackService implements RabbitTemplate.ConfirmCallback {
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
 
         if (!ack) {
-            log.error("消息发送异常!");
+            log.error("交换机接收消息异常!，correlationData={} ,ack={}, cause={}", correlationData.getId(), ack, cause);
         } else {
-            log.info("发送者爸爸已经收到确认，correlationData={} ,ack={}, cause={}", correlationData.getId(), ack, cause);
+            log.info("交换机已接收到消息，correlationData={} ,ack={}, cause={}", correlationData.getId(), ack, cause);
         }
     }
 }
